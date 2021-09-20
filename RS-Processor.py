@@ -13,7 +13,24 @@ from EasyWindow import *
 from ProWindow import *
 from EasyMode import *
 from ProMode import *
+from LoadWindow import *
+from login import *
 from BaselineRemoval import BaselineRemoval
+
+
+class LoginWindow(QMainWindow, Ui_LoginWindow):
+    def __init__(self, parent=None):
+        super(LoginWindow, self).__init__(parent)
+        self.setupUi(self)
+        self.my_init()
+
+    def my_init(self):
+        main_window = MainWindow()
+        self.password.setEchoMode(QLineEdit.Password)
+        self.password.returnPressed.connect(lambda: login(self, main_window))
+        self.login_button.clicked.connect(lambda: login(self, main_window))
+
+
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -70,6 +87,6 @@ class ProWindow(QMainWindow, Ui_ProWindow):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    main_window = MainWindow()
-    main_window.show()
+    login_window = LoginWindow()
+    login_window.show()
     sys.exit(app.exec_())
