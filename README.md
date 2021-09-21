@@ -1,2 +1,2 @@
-# RS-Processor
+# RS-Tool
  A toolkit fo Raman spectrum.
