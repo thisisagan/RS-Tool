@@ -3,9 +3,7 @@ import numpy as np
 import pandas as pd
 import os
 import sys
-import matplotlib.pyplot as plt
 from sklearn.ensemble import IsolationForest
-from sklearn.decomposition import PCA
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QLineEdit
 from MainWindow import *
