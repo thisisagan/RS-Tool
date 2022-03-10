@@ -1,9 +1,3 @@
-import os
-import numpy as np
-import pandas as pd
-import os
-import sys
-from sklearn.ensemble import IsolationForest
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QLineEdit
 from MainWindow import *
@@ -11,7 +5,9 @@ from EasyWindow import *
 from ProWindow import *
 from EasyMode import *
 from ProMode import *
-from LoadWindow import *
+from ValidMode import *
+from LoginWindow import *
+from ValidWindow import *
 from login import *
 from BaselineRemoval import BaselineRemoval
 
@@ -29,8 +25,6 @@ class LoginWindow(QMainWindow, Ui_LoginWindow):
         self.login_button.clicked.connect(lambda: login(self, main_window))
 
 
-
-
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
@@ -40,8 +34,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def my_init(self):
         easy_window = EasyWindow()
         pro_window = ProWindow()
+        valid_window = ValidWindow()
         self.easyButton.clicked.connect(lambda: easy_window.show())
         self.proButton.clicked.connect(lambda: pro_window.show())
+        self.validButton.clicked.connect(lambda: valid_window.show())
 
 
 class EasyWindow(QMainWindow, Ui_EasyWindow):
@@ -66,6 +62,7 @@ class ProWindow(QMainWindow, Ui_ProWindow):
         self.load_label.setAlignment(Qt.AlignCenter)
         self.process_label.setAlignment(Qt.AlignCenter)
         self.save_label.setAlignment(Qt.AlignCenter)
+        self.peak_location.setValidator(QtGui.QIntValidator())  # 设置只能输入int类型的数据
         self.my_init()
         self.set_default()
 
@@ -82,9 +79,29 @@ class ProWindow(QMainWindow, Ui_ProWindow):
         self.single_sv_button.setChecked(True)
 
 
+class ValidWindow(QMainWindow, Ui_ValidWindow):
+    def __init__(self, parent=None):
+        super(ValidWindow, self).__init__(parent)
+        self.setupUi(self)
+        self.setWindowModality(Qt.ApplicationModal)
+        self.peak_location.setValidator(QtGui.QIntValidator())  # 设置只能输入int类型的数据
+        self.reporter_browser.setAcceptRichText(True)
+        self.my_init()
+        self.set_default()
+
+    def my_init(self):
+        valid_mod = ValidMode(self)
+        self.load_blank_button.clicked.connect(lambda: valid_mod.load_blank())
+        self.valid_button.clicked.connect(lambda: valid_mod.valid())
+
+    def set_default(self):
+        self.renishaw_select_button.setChecked(True)
+        self.method2_button.setChecked(True)
+
+
 if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
+    from sys import argv, exit
+    app = QtWidgets.QApplication(argv)
     login_window = LoginWindow()
     login_window.show()
-    sys.exit(app.exec_())
+    exit(app.exec_())
